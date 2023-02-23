@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les épisodes de la saison {{ season.number }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Saison {{ season.number }} de <i>{{ program.title }}</i></h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('program_index') }}">Programmes</a></li>
+                <li class="breadcrumb-item"><a
+                        href="{{ path('program_show', {'programId':program.id}) }}">{{ program.title }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Saison {{ season.number }}</li>
+            </ol>
+        </nav>
+
+        <blockquote>{{ season.description }}</blockquote>
+
+        <div class="card my-5">
+            <div class="card-body">
+                <h3 class="card-title">Liste des épisodes</h3>
+                <div class="list-group">
+                    {% for episode in season.episodes %}
+                        <li class="list-group-item">{{ episode.number }} : <i>{{ episode.title }}</i></li>
+                    {% else %}
+                        <p>Aucun épisode</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <a class="btn btn-outline-primary"
+           href="{{ path('program_show', {'programId': program.id}) }}">Retour
+            à la liste des saisons</a>
+    </div>
+{% endblock %}

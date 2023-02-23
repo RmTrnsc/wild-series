@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Le programme {{ program.title }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Programme: {{ program.title }}</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('program_index') }}">Programmes</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ program.title }}</li>
+            </ol>
+        </nav>
+
+        <blockquote>{{ program.synopsis }}</blockquote>
+
+        <div class="card my-5">
+            <div class="card-body">
+                <h3 class="card-title">Liste des saisons</h3>
+                <div class="list-group">
+                    {% for season in program.seasons %}
+                        <a class="list-group-item"
+                           href="{{ path('program_season_show', {'programId': program.id, 'seasonId': season.id}) }}">{{ season.number }}
+                            - {{ season.year }}</a>
+                    {% else %}
+                        <p>Aucune saison</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <a class="btn btn-outline-primary"
+           href="{{ path('category_show', {'categoryName': program.category.name}) }}">Retour
+            à la liste des programmes {{ program.category.name }}</a>
+    </div>
+{% endblock %}

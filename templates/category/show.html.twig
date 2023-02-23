@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}La catégorie {{ category.name }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Liste des séries de la catégories {{ category.name }}</h1>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('category_index') }}">Catégories</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Catégorie {{ category.name }}</li>
+            </ol>
+        </nav>
+
+        <div class="list my-5">
+            {% for program in categoryPrograms %}
+                <div class="card my-5">
+                    <div class="card-body">
+                        <h3 class="card-title">{{ program.id }} - {{ program.title }}</h3>
+                        <blockquote class="card-text">
+                            {{ program.synopsis }}
+                        </blockquote>
+                        <a href="{{ path('program_show',{'programId': program.id}) }}">En voir plus</a>
+                    </div>
+                </div>
+            {% else %}
+                <h3>Aucune série trouvée</h3>
+            {% endfor %}
+        </div>
+        <a class="btn btn-outline-primary" href="{{ path('category_index') }}">Retour aux catégories</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les Programmes{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Liste des programmes</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">Programmes</li>
+            </ol>
+        </nav>
+        <div class="card my-5">
+            <div class="card-body">
+                <div class="list-group">
+                    {% for program in programs %}
+                        <li class="list-group-item">{{ program.id }} -
+                            <a href="{{ path('program_show', {'programId' : program.id}) }}">{{ program.title }}</a>
+                            <i>({{ program.category.name }})</i>
+                        </li>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
