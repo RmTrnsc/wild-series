@@ -17,24 +17,47 @@
                 catégories</a>
         </div>
         <div class="container my-5 px-4">
-            <div class="row justify-content-md-center">
-                {% for program in programs %}
-                    <div class="col-3 card m-1 p-4 text-center">
-                        <img src="{{ program.poster }}" class="card-img-top" alt="program image">
-                        <div class="card-body p-1 position-relative">
-                            <h3 class="card-title fs-3">
-                                {{ program.title }}
-                                <h6 class="card-subtitle mt-0 mb-2 text-muted"><i>({{ program.category.name }})</i></h6>
-                            </h3>
-                            <div class="card-text">
-                                {{ program.synopsis|u.truncate(50,'...') }}
-                            </div>
-                        </div>
-                        <a class="btn btn-outline-dark w-100"
-                           href="{{ path('program_show', {'programId' : program.id}) }}">Voir le programme</a>
-                    </div>
-                {% endfor %}
-            </div>
+            <div id="items-container" class="row d-flex justify-content-md-center g-0"></div>
         </div>
     </div>
 {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const url = new URL('https://imdb-api.com/fr/API/MostPopularMovies/pk_0fxfa9gd6k4dplggk')
+                const response = await fetch(url.toString())
+                if (response.ok) {
+                    const json = await response.text()
+                    const items = JSON.parse(json).items
+                    const itemsContainer = document.getElementById('items-container')
+                    items.forEach((item) => {
+                        let cardContainer = document.createElement('div')
+                        cardContainer.setAttribute('class', 'card m-1 col-md-5')
+
+                        cardContainer.innerHTML = '' +
+                            '<div class="row g-0">' +
+                            '<div class="col-md-4">' +
+                            '<img class="img-fluid rounded-start" src="' + item['image'] + '" alt="Affiche du film">' +
+                            '</div>' +
+                            '<div class="col-md-8">' +
+                            '<div class="card-body">' +
+                            '<h4 class="card-title">' + item['title'] + '</h4>' +
+                            '<p class="card-text">' + item['year'] + '</p>' +
+                            '<p class="card-text">' + item['crew'] + '</p>' +
+                            '</div> ' +
+                            '</div>' +
+                            '</div>'
+
+                        itemsContainer.append(cardContainer)
+                    })
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        })
+
+    </script>
+{% endblock %}
+
