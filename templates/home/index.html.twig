@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue{% endblock %}
+
+{% block body %}
+    <div class="container py-4">
+        <div class="p-5 mb-4 bg-light border border-1 rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="fw-bold">Bienvenue sur le site Wild Séries</h1>
+                <a class="btn btn-outline-dark" href="{{ path('program_index') }}">Voir nos programmes</a>
+                <a class="btn btn-outline-dark" href="{{ path('category_index') }}">Voir nos categories</a>
+            </div>
+        </div>
+
+        <div id="items-container" class="container row mx-auto d-flex justify-content-md-center g-0">
+        </div>
+
+        <div id="title"></div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const url = new URL('https://imdb-api.com/API/MostPopularMovies/pk_q1c3hcma04r3foa52')
+                const response = await fetch(url.toString())
+                if (response.ok) {
+                    const json = await response.text()
+                    const items = JSON.parse(json).items
+                    const itemsContainer = document.getElementById('items-container')
+                    items.forEach((item) => {
+                        let itemContainer = document.createElement('div')
+                        let itemRow = document.createElement('div')
+                        let itemInfo = document.createElement('div')
+                        let itemTitle = document.createElement('p')
+                        let itemYear = document.createElement('p')
+                        let itemCrew = document.createElement('p')
+                        let itemPoster = document.createElement('img')
+
+                        itemContainer.setAttribute('class', 'item-container card m-1 col-5')
+                        itemRow.setAttribute('class', 'row align-items-center')
+                        itemInfo.setAttribute('class', 'item-info d-flex flex-column card-body col-md-8')
+                        itemTitle.setAttribute('class', 'item-title card-title')
+                        itemYear.setAttribute('class', 'item-year card-text')
+                        itemCrew.setAttribute('class', 'item-crew card-text')
+                        itemPoster.setAttribute('class', 'item-poster img-fluid rounded-start col-md-4')
+                        itemPoster.setAttribute('alt', 'Poster du  film')
+
+                        itemTitle.innerHTML = item['title']
+                        itemYear.innerHTML = item['year']
+                        itemCrew.innerHTML = item['crew']
+                        itemPoster.setAttribute('src', item['image'])
+
+                        itemInfo.append(itemTitle)
+                        itemInfo.append(itemYear)
+                        itemInfo.append(itemCrew)
+                        itemRow.append(itemPoster)
+                        itemRow.append(itemInfo)
+                        itemContainer.append(itemRow)
+
+                        itemsContainer.append(itemContainer)
+                    })
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        })
+
+    </script>
+{% endblock %}

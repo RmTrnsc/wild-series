@@ -3,31 +3,43 @@
 {% block title %}La catégorie {{ category.name }}{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1>Liste des séries de la catégories {{ category.name }}</h1>
+    <div class="container py-4">
+        <div class="p-5 mb-4 bg-light border border-1 rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="fw-bold">Liste des séries de la catégories {{ category.name }}</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a class="text-dark" href="{{ path('category_index') }}">Catégories</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Catégorie {{ category.name }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
 
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ path('category_index') }}">Catégories</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Catégorie {{ category.name }}</li>
-            </ol>
-        </nav>
-
-        <div class="list my-5">
+        <div class="container my-5 d-flex flex-column align-items-md-center">
             {% for program in categoryPrograms %}
-                <div class="card my-5">
-                    <div class="card-body">
-                        <h3 class="card-title">{{ program.id }} - {{ program.title }}</h3>
-                        <blockquote class="card-text">
-                            {{ program.synopsis }}
-                        </blockquote>
-                        <a href="{{ path('program_show',{'programId': program.id}) }}">En voir plus</a>
+                <div class="card my-1 w-75">
+                    <div class="row g-0">
+                        <div class="col-md-8 card-body p-4 position-relative">
+                            <h3 class="card-title fs-3">{{ program.id }} - {{ program.title }}</h3>
+                            <blockquote class="card-text">
+                                {{ program.synopsis|u.truncate(150,'...') }}
+                            </blockquote>
+                            <a class="btn btn-outline-dark position-absolute bottom-0 start-0 m-2"
+                               href="{{ path('program_show',{'programId': program.id}) }}">Voir plus</a>
+                        </div>
+                        <div class="col-md-4">
+                            <img src="{{ program.poster }}" class="img-fluid rounded-end float-end" alt="program image"
+                                 width="150">
+                        </div>
                     </div>
                 </div>
             {% else %}
                 <h3>Aucune série trouvée</h3>
             {% endfor %}
         </div>
-        <a class="btn btn-outline-primary" href="{{ path('category_index') }}">Retour aux catégories</a>
+        <a class="btn btn-outline-dark my-5" href="{{ path('program_index') }}">Les programmes</a>
     </div>
 {% endblock %}

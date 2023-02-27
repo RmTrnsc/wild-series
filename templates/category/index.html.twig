@@ -3,24 +3,28 @@
 {% block title %}Les catégories{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1>Liste des catégories</h1>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active" aria-current="page">Catégories</li>
-            </ol>
-        </nav>
-
-        <div class="card">
-            <div class="card-body">
-                <div class="list-group">
-                    {% for category in categories %}
-                        <li class="list-group-item">{{ category.id }} -
-                            <a href="{{ path('category_show', {'categoryName' : category.name}) }}">{{ category.name }}</a>
-                        </li>
-                    {% endfor %}
-                </div>
+    <div class="container py-4">
+        <div class="p-5 mb-4 bg-light border border-1 rounded-3 position-relative">
+            <div class="container-fluid py-5">
+                <h1 class="fw-bold">Liste des catégories</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">Catégories</li>
+                    </ol>
+                </nav>
             </div>
+            <a class="btn btn-outline-dark m-1 position-absolute top-0 start-0" href="{{ path('program_index') }}">Les programmes</a>
+        </div>
+
+        <div class="container my-5 d-flex flex-column justify-content-md-center">
+            {% for category in categories %}
+                <div class="card w-25 mx-auto m-2">
+                    <div class="card-body">
+                        <a class="card-title btn btn-outline-dark w-100"
+                           href="{{ path('category_show', {'categoryName' : category.name}) }}">{{ category.name }}</a>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

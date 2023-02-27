@@ -3,33 +3,64 @@
 {% block title %}Le programme {{ program.title }}{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1>Programme: {{ program.title }}</h1>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ path('program_index') }}">Programmes</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ program.title }}</li>
-            </ol>
-        </nav>
-
-        <blockquote>{{ program.synopsis }}</blockquote>
-
-        <div class="card my-5">
-            <div class="card-body">
-                <h3 class="card-title">Liste des saisons</h3>
-                <div class="list-group">
-                    {% for season in program.seasons %}
-                        <a class="list-group-item"
-                           href="{{ path('program_season_show', {'programId': program.id, 'seasonId': season.id}) }}">{{ season.number }}
-                            - {{ season.year }}</a>
-                    {% else %}
-                        <p>Aucune saison</p>
-                    {% endfor %}
-                </div>
+    <div class="container py-4">
+        <div class="p-5 mb-4 bg-light border border-1 rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="fw-bold">Programme: {{ program.title }}</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a class="text-dark" href="{{ path('program_index') }}">Programmes</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ program.title }}</li>
+                    </ol>
+                </nav>
             </div>
         </div>
 
-        <a class="btn btn-outline-primary"
+        <img src="{{ program.poster }}" class="rounded w-25 mx-auto d-block" alt="program image">
+        <div class="container my-5 d-flex align-items-md-center">
+            <figure class="text-start w-50 h-100">
+                <blockquote class="blockquote">{{ program.synopsis }}</blockquote>
+            </figure>
+
+            {% if program.seasons|length > 0 %}
+                <div class="card w-50 h-100">
+                    <div class="card-body">
+                        <h3 class="text-end card-title">Liste des saisons</h3>
+                        <div class="accordion" id="season-accordion">
+                            {% for season in program.seasons %}
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header bg-light" id="heading-{{ season.id }}">
+                                        <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#collapse-{{ season.id }}" aria-expanded="false"
+                                                aria-controls="collapse-{{ season.id }}">
+                                            Saison {{ season.number }}
+                                        </button>
+                                    </h2>
+                                    <div id="collapse-{{ season.id }}" class="accordion-collapse collapse"
+                                         aria-labelledby="heading-{{ season.id }}"
+                                         data-bs-parent="#season-accordion">
+                                        <div class="accordion-body d-flex flex-column align-items-md-center">
+                                            {{ season.description|u.truncate(100,'...') }}
+                                            <a href="{{ path('program_season_show', {'programId': program.id, 'seasonId': season.id}) }}"
+                                               class="btn btn-outline-dark w-50 my-2">
+                                                Voir les épisodes
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <h3 class="text-end fs-3 w-50 h-100">Aucune saison</h3>
+            {% endif %}
+        </div>
+
+        <a class="btn btn-outline-dark"
            href="{{ path('category_show', {'categoryName': program.category.name}) }}">Retour
             à la liste des programmes {{ program.category.name }}</a>
     </div>
