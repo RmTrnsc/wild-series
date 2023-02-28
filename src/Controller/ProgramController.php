@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ProgramRepository;
 use App\Repository\SeasonRepository;
+use Exception;
 use \Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,11 +32,12 @@ class ProgramController extends AbstractController
 
     /**
      * @Route("/{programId}", methods={"GET"}, name="show")
-     * @param int $programId
+     * @param $programId
      * @param ProgramRepository $programRepository
      * @return Response
+     * @throws Exception
      */
-    public function show(int $programId, ProgramRepository $programRepository): Response
+    public function show($programId, ProgramRepository $programRepository): Response
     {
         $program = $programRepository->find($programId);
 
